@@ -1,6 +1,7 @@
 import { IQueryResultBindings, newEngine } from "@comunica/actor-init-sparql";
 import LbdDataset from "lbdserver-client-api/lib/types/helpers/LbdDataset";
 import LbdDistribution from "lbdserver-client-api/lib/types/helpers/LbdDistribution";
+import {translate, toSparql} from 'sparqlalgebrajs'
 
 function extract(jsonld, uri) {
     return Object.assign({}, ...jsonld.filter(i => i["@id"] === uri))
@@ -115,5 +116,57 @@ function extract(jsonld, uri) {
       });
     });
   }
+ 
+  
+  // const start = new Date()
+  // const prefixes = `
+  // PREFIX ex: <http://example.org/voc#> 
+  // `
+  
+  // const q0 = prefixes + 'SELECT ?item ?dam WHERE  {?item a ex:Door ; ex:hasDamage ?dam }'
+  // const q1 = prefixes + 'SELECT ?item ?dam ?g WHERE { GRAPH ?g {?item a ex:Door ; ex:hasDamage ?dam }}'
+  
+  // function fragment(query: string) {
+  //     function findLowerLevel(obj, variables?) {
+  //         if (!variables) variables = obj.variables
+  //         if (obj.type === "bgp") {
+  //             return {bgp: obj, variables}
+  //         } else {
+  //             return findLowerLevel(obj.input, variables)
+  //         }
+  //     }
+      
+  //     function backToSparql(bgp, variables) {
+  //         const allQueries = bgp.patterns.map(pattern => {
+  //             const patterns = [pattern]
+  //             const theQ1 = {type: "bgp", patterns}
+  //             const graphVar = { termType: 'Variable', value: 'g' }
+  //             const includedVars = variables.filter(i => [pattern.subject.value, pattern.object.value, pattern.predicate.value].includes(i.value))
+  //             const theQ2 = {type: "project", input: {type: "graph", input: theQ1, name: graphVar }, variables: [...includedVars, graphVar]}
+  //             return toSparql(theQ2)
+  //         })
+  //         return allQueries
+  //     }
+  
+  //     const translation = translate(query);
+  //     const {bgp, variables} = findLowerLevel(translation, translation.variables)
+  //     return backToSparql(bgp, variables)
+  // }
+  
+  // async function queryProject(queries, sources) {
+  //     const myEngine = newEngine()
+  //     for (const q of queries) {
+  //         const results = await myEngine.query(q, {sources})
+  //         const {data} = await myEngine.resultToString(results, "application/json")
+  //     }
+  // }
+  
+  // const fragmentations = fragment(q0)
+  
+  
+  
+  
+  // const timePassed = new Date().getTime() - start.getTime()
+  // console.log('timePassed', timePassed);
 
 export {extract, createReferences}

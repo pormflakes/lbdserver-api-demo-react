@@ -208,14 +208,19 @@ export default class LBDviewer extends Component {
     componentDidUpdate() {
         let entities = this.state.viewer.scene.objects
         const selection = this.props.selection
-        if (selection && selection !== this.state.lastQueried) {
+        if (selection !== this.state.lastQueried) {
+            // selection.forEach(item => {
+            //     console.log('item', item)
+            //     console.log('entities.item', entities)
+            //     entities[item].highlighted = true
+            // })
             Object.keys(entities).forEach(ent => {
                 if (selection.includes(entities[ent].id)) {
                     entities[ent].highlighted = true
                 } else {
                     entities[ent].highlighted = false
                 }})
-            this.setState({ lastQueried: selection, selection})
+            // this.setState({ lastQueried: selection, selection})
         }
     }
 

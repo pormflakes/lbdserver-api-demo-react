@@ -12,36 +12,17 @@ import { extract } from '../../../util/functions';
 import { DCTERMS, LDP, RDFS } from '@inrupt/vocab-common-rdf'
 const { LbdProject, LbdService } = LBDserver
 
-export default function CreateProject(props) {
+export default function InviteStakeholder(props) {
     const { open, title, description, Child, childProps } = props
     const [project, setProject] = useRecoilState(p)
-    const [aggregator, setAggregator] = useState(AGGREGATOR_ENDPOINT)
-    const [endpointType, setEndpointType] = useState("public")
-    const [projects, setProjects] = useState([])
+    const [stakeholder, setStakeholder] = useState("")
     const [error, setError] = useState(null)
-    const [name, setName] = useState("MyFirstProject")
+    const [name, setName] = useState("")
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
-    const [id, setId] = useState(v4())
-    async function createProject() {
-        try {
-            setLoading(true)
-            const myService = new LbdService(getDefaultSession())
-            const aggregator = await myService.getProjectRegistry(getDefaultSession().info.webId)
-            if (!aggregator) await myService.createProjectRegistry()
-            const accessPoint = aggregator + id
-            const myProject = new LbdProject(getDefaultSession(), accessPoint)
-            await myProject.create([], {[RDFS.label]: name}, true)
-            
-            setProject(myProject)
-            setSuccess(true)
-            setLoading(false)
-        } catch (error) {
-            console.log('error', error)
-            setError(error)
-            setLoading(false)
-        }
 
+    async function inviteStakeholder() {
+        await project.addPartialProjectByStakeholder()
     }
 
     return <div>
@@ -52,27 +33,16 @@ export default function CreateProject(props) {
 
             <br/>
             <TextField
-                    id="projectName"
-                    label="Project Name"
-                    placeholder="Project Name"
-                    defaultValue={name}
+                    id="stakeholder"
+                    label="Stakeholder WebID"
+                    placeholder="Stakeholder WebID"
+                    defaultValue={stakeholder}
                     fullWidth
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setStakeholder(e.target.value)}
                     autoFocus
                     disabled={loading}
                 />
-            <TextField
-                style={{marginTop: 15}}
-                    id="projectId"
-                    label="Project ID"
-                    placeholder="Project ID"
-                    defaultValue={id}
-                    fullWidth
-                    onChange={(e) => setId(e.target.value)}
-                    autoFocus
-                    disabled={loading}
-                />
-            <Button style={{marginTop: 10, width: "200"}} variant="contained" onClick={createProject} disabled={loading}>Create Project</Button>
+            <Button style={{marginTop: 10, width: "200"}} variant="contained" onClick={inviteStakeholder} disabled={loading}>Invite</Button>
             {error ? (
                 <Alert onClose={() => setError(null)} severity="error">{error.message}</Alert>
             ) : (<React.Fragment/>)}

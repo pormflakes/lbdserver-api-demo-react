@@ -19,7 +19,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -43,8 +43,8 @@ export default function BasicTabs(props) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Typography variant="h5">{title}</Typography>
-      <Typography>{description}</Typography>
+      <Typography component={"span"} variant="h5">{title}</Typography>
+      <Typography component={"span"}>{description}</Typography>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="GlTF Viewer" {...a11yProps(0)} />
